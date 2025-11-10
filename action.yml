@@ -1,0 +1,28 @@
+name: 'Update Umbrel App'
+description: |
+  Updates umbrel-app.yml files in Umbrel App Stores to mirror updates to associated docker compose files 
+  and commits the result to the current branch.
+inputs:
+  source_service_name:
+    description: 'Service name name to read the updated version from.'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@v5
+      with:
+        ref: ${{ github.head_ref }}
+    - uses: mikefarah/yq@v4
+      with:
+        cmd: yq --version
+    - name: Set GitHub Path
+      run: echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
+      shell: bash
+      env:
+        GITHUB_ACTION_PATH: ${{ github.action_path }}
+    - name: Update umbrel-app.yml
+      run: update-version.sh "${{ inputs.source_service_name }}"
+      shell: bash
+    - uses: stefanzweifel/git-auto-commit-action@v7
+      with:
+        commit_message: Update versions in umbrel-app.yml
