@@ -74,7 +74,7 @@ jobs:
           ref: ${{ github.head_ref }}
 
       # 2. Run the update action
-      - uses: CPardi/update-umbrel-app-action@000eab82d99e2220e6715b74ee0667a593f48851
+      - uses: CPardi/update-umbrel-app-action@v0
         with:
           # The service name in docker-compose.yml to source the version from
           source_service_name: web
