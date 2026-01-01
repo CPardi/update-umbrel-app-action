@@ -1,6 +1,6 @@
 services:
   app_proxy:
     environment:
-      APP_HOST: test-requires-update_web_1
+      APP_HOST: test-dependabot_web_1
   web:
     image: jvstein/bitcoin-prometheus-exporter:v0.8.0@sha256:31ab56a97eb78ebb7743859cbb255971044e182ed4ab76f115aacc68297d5602

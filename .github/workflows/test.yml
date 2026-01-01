@@ -1,11 +1,29 @@
 name: Update umbrel-app.yml metadata version
 
 on:
+  push:
+    branches:
+      - master
   pull_request:
     types: [opened, synchronize, reopened]
 
 jobs:
-  update-umbrel-app:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - uses: mikefarah/yq@v4
+        with:
+          cmd: yq --version
+
+      - name: Run update-version tests
+        working-directory: tests-update-version
+        run: |
+          ./run-tests.sh
+
+  create-test-pr:
     if: github.actor == 'dependabot[bot]'
     runs-on: ubuntu-latest
 
@@ -15,5 +33,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
+
           ref: ${{ github.head_ref }}
       - uses: CPardi/update-umbrel-app-action@v0
