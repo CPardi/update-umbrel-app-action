@@ -16,7 +16,7 @@ jobs:
           cmd: yq --version
 
       - name: Run update-version tests
-        working-directory: ./test-update-version/
+        working-directory: tests-update-version
         run: |
           ./run-tests.sh
 
