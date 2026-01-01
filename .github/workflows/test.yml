@@ -35,4 +35,4 @@ jobs:
         with:
 
           ref: ${{ github.head_ref }}
-      - uses: CPardi/update-umbrel-app-action@v0
+      - uses: CPardi/update-umbrel-app-action@master
