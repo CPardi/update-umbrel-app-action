@@ -3,4 +3,4 @@ services:
     environment:
       APP_HOST: metrics-bitcoin-exporter_web_1
   web:
-    image: jvstein/bitcoin-prometheus-exporter:v0.8.0@sha256:358132b6967554f4d30a43847bfc5fd941719eb257b2820cf8ebd16405733843
+    image: jvstein/bitcoin-prometheus-exporter:v0.8.0@sha256:31ab56a97eb78ebb7743859cbb255971044e182ed4ab76f115aacc68297d5602
