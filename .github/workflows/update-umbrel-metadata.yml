@@ -9,17 +9,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
-      - name: Set up yq
-        run: |
-          sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
-          sudo chmod +x /usr/local/bin/yq
+      - uses: mikefarah/yq@v4
+        with:
+          cmd: yq --version
 
       - name: Run update-version tests
+        working-directory: ./test-update-version/
         run: |
-          chmod +x test-update-version/run-tests.sh
-          ./test-update-version/run-tests.sh
+          ./run-tests.sh
 
   update-umbrel-app:
     if: github.actor == 'dependabot[bot]'
