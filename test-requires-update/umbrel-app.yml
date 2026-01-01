@@ -1,0 +1,3 @@
+manifestVersion: 1
+id: metrics-bitcoin-exporter
+version: "v0.9.0"
