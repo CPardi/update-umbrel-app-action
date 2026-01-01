@@ -1,6 +1,9 @@
 name: Update umbrel-app.yml metadata version
 
 on:
+  push:
+    branches:
+      - master
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -20,7 +23,7 @@ jobs:
         run: |
           ./run-tests.sh
 
-  update-umbrel-app:
+  create-test-pr:
     if: github.actor == 'dependabot[bot]'
     runs-on: ubuntu-latest
 
