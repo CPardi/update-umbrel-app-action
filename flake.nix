@@ -10,7 +10,7 @@
         in
         pkgs.mkShell {
           packages = with pkgs; [
-            yq
+            yq-go
           ];
         };
     };

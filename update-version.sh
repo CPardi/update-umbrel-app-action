@@ -19,7 +19,7 @@ resolve_service() {
   if [ -n "$source_service_name" ]; then
     service_name="$source_service_name"
   else
-    service_name=$(yq ".services.app_proxy.environment.APP_HOST" "$directory/docker-compose.yml" | \
+    service_name=$(yq e ".services.app_proxy.environment.APP_HOST" "$directory/docker-compose.yml" | \
       grep -v null | \
       sed -E 's/^[^_]+_([^_]+)_[^_]+$/\1/') # Extract <service-name> from the convention <project-name>_<service-name>_<replica-number>
   fi
@@ -65,7 +65,7 @@ process_manifest() {
   check_not_empty "$version" "Could not resolve version of '$service_name' in manifest '$file'"
   echo "- Resolved version to: $version"
 
-  yq --in-place --yml-roundtrip ".version = \"$version\"" "$file"
+  yq e --inplace ".version = \"$version\"" "$file"
 }
 
 find . -type f -name 'umbrel-app.yml' | \
