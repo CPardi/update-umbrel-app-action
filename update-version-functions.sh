@@ -13,6 +13,7 @@ check_not_empty() {
 resolve_service() {
   local source_service_name=$1
   local directory=$2
+  local fallback_service_name=$3
 
   if [ -n "$source_service_name" ]; then
     service_name="$source_service_name"
@@ -22,7 +23,15 @@ resolve_service() {
       sed -E 's/^[^_]+_([^_]+)_[^_]+$/\1/') # Extract <service-name> from the convention <project-name>_<service-name>_<replica-number>
   fi
 
-  echo $service_name
+  if [ "$(yq e ".services.$service_name.image" "$directory/docker-compose.yml")" = "null" ]; then
+    if [ -n "$fallback_service_name" ]; then
+      service_name="$fallback_service_name"
+    else
+      service_name=""
+    fi
+  fi
+
+  echo "$service_name"
 }
 
 resolve_image() {
@@ -43,13 +52,14 @@ resolve_version() {
 process_manifest() {
   local file="$1"
   local source_service_name="$2"
+  local fallback_service_name="$3"
 
   echo "- Found umbrel manifest: $file"
   local directory
   directory=$(dirname "$file")
 
   local service_name
-  service_name=$(resolve_service "$source_service_name" "$directory")
+  service_name=$(resolve_service "$source_service_name" "$directory" "$fallback_service_name")
   check_not_empty "$service_name" "Could not resolve service name in manifest '$file'"
   echo "- Resolved service name to: $service_name"
 
