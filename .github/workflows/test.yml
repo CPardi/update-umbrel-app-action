@@ -1,4 +1,4 @@
-name: Update umbrel-app.yml metadata version
+name: Test
 
 on:
   push:
