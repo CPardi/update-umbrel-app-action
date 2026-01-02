@@ -4,7 +4,10 @@ description: |
   and commits the result to the current branch.
 inputs:
   source_service_name:
-    description: 'Service name name to read the updated version from.'
+    description: 'Static service name to read the updated version from.'
+    required: false
+  fallback_service_name:
+    description: 'Static service name to read the updated version from when cannot infer service from APP_HOST.'
     required: false
 runs:
   using: 'composite'
@@ -21,7 +24,7 @@ runs:
       env:
         GITHUB_ACTION_PATH: ${{ github.action_path }}
     - name: Update umbrel-app.yml
-      run: update-version.sh "${{ inputs.source_service_name }}"
+      run: update-version.sh "${{ inputs.source_service_name }}" "${{ inputs.fallback_service_name }}"
       shell: bash
     - uses: stefanzweifel/git-auto-commit-action@v7
       with:

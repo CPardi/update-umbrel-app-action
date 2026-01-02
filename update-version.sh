@@ -5,8 +5,9 @@ echo $scriptPath
 . "$scriptPath/update-version-functions.sh"
 
 source_service_name="$1"
+fallback_service_name="$2"
 
 find . -maxdepth 2 -type f -name 'umbrel-app.yml' | \
 while read -r file; do
-  process_manifest "$file" "$source_service_name"
+  process_manifest "$file" "$source_service_name" "$fallback_service_name"
 done

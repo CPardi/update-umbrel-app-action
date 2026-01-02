@@ -3,22 +3,23 @@
 This GitHub Action automatically synchronises the`version` field in your `umbrel-app.yml` file with the Docker image
 version specified in the corresponding `docker-compose.yml` file.
 
-It's designed to work seamlessly with Dependabot, which automatically creates pull requests to update Docker image 
+It's designed to work seamlessly with Dependabot, which automatically creates pull requests to update Docker image
 versions. When Dependabot opens a PR, this action will update the app manifest to match, keeping everything in sync.
 
 ## How It Works
 
 The action performs the following steps:
 
-1.  Searches for all modified `docker-compose.yml` files.
-2.  For each modified Compose file, it extracts the version tag from the Docker image of the specified service.
-3.  It finds the corresponding `umbrel-app.yml` file in the same directory.
-4.  It updates the`version` field in the `umbrel-app.yml` file.
-5.  Finally, it commits the changes back to the current branch.
+1. Searches for all `umbrel-app.yml` files.
+2. For each file, reads the `docker-compose.yml` file in the same directory
+3. Extracts the version from the image string of the resolved service
+   1. As compose files can contain multiple services, the service image from which to get the version is chosen using the name in the APP_HOST, see the Inputs section to customise this resolution
+4. Update the`version` field in the `umbrel-app.yml` file.
+5. Finally, commit the changes back to the current branch.
 
 ## Prerequisites
 
-For the action to work correctly, your repository should follow a standard Umbrel App structure where each app resides 
+For the action to work correctly, your repository should follow a standard Umbrel App structure where each app resides
 in its own directory, containing both its `docker-compose.yml` and `umbrel-app.yml` files.
 
 ```
@@ -36,16 +37,21 @@ my-umbrel-app-store/
 
 ## Inputs
 
-| Name                  | Required | Description                                                                                      |
-|-----------------------|----------|--------------------------------------------------------------------------------------------------|
-| `source_service_name` | `true`   | The name of the service in the `docker-compose.yml` files whose image version you want to track. |
+When no inputs are specified an attempt is made to infer the service name from the APP_HOST variable using the default
+Docker Compose convention `<project-name>_<service-name>_<replica-number>`. If all your apps follow this convention no
+inputs are required. If not, then `fallback_service_name` or `source_service_name` inputs can be specified.
+
+| Name                    | Required | Description                                                                         |
+|-------------------------|----------|-------------------------------------------------------------------------------------|
+| `fallback_service_name` | `false`  | If inferring the service name fails then fallback to using this value.              |
+| `source_service_name`   | `false`  | Static name of the service name to always search for in `docker-compose.yml` files. |
 
 ## Example Workflow
 
-Below is an example workflow that runs whenever a pull request is opened or updated, specifically for changes initiated 
+Below is an example workflow that runs whenever a pull request is opened or updated, specifically for changes initiated
 by Dependabot.
 
-A working example can be found in the [Metrics Umbrel App Store](https://github.com/CPardi/metrics-umbrel-store/tree/master/.github) 
+A working example can be found in the [Metrics Umbrel App Store](https://github.com/CPardi/metrics-umbrel-store/tree/master/.github)
 repository.
 
 ```yaml
@@ -75,14 +81,12 @@ jobs:
 
       # 2. Run the update action
       - uses: CPardi/update-umbrel-app-action@v0
-        with:
-          # The service name in docker-compose.yml to source the version from
-          source_service_name: web
+        # Add a with section to customisation the service image from which to get the version
 ```
 
 ## Example Dependabot Configuration
 
-To automate the process of keeping your Docker images up to date, add a `.github/dependabot.yml` file to your 
+To automate the process of keeping your Docker images up to date, add a `.github/dependabot.yml` file to your
 repository. This configuration is a great starting point for an Umbrel App Store repository.
 
 It will:
