@@ -10,6 +10,15 @@ check_not_empty() {
   fi
 }
 
+warn_if_empty() {
+  local value="$1"
+  local warning_message="$2"
+
+  if [[ -z "$value" ]]; then
+    echo "Warning: $warning_message" >&2
+  fi
+}
+
 resolve_service() {
   local source_service_name=$1
   local directory=$2
@@ -60,18 +69,22 @@ process_manifest() {
 
   local service_name
   service_name=$(resolve_service "$source_service_name" "$directory" "$fallback_service_name")
-  check_not_empty "$service_name" "Could not resolve service name in manifest '$file'"
+  warn_if_empty "$service_name" "Could not resolve service name in manifest '$file'"
   echo "- Resolved service name to: $service_name"
 
-  local image
-  image=$(resolve_image "$service_name" "$directory")
-  check_not_empty "$image" "Could not resolve image of '$service_name' in manifest '$file'"
-  echo "- Resolved image to: $image"
+  if [[ -n "$service_name" ]]; then
+    local image
+    image=$(resolve_image "$service_name" "$directory")
+    check_not_empty "$image" "Could not resolve image of '$service_name' in manifest '$file'"
+    echo "- Resolved image to: $image"
 
-  local version
-  version=$(resolve_version "$image" "$directory")
-  check_not_empty "$version" "Could not resolve version of '$service_name' in manifest '$file'"
-  echo "- Resolved version to: $version"
+    local version
+    version=$(resolve_version "$image" "$directory")
+    check_not_empty "$version" "Could not resolve version of '$service_name' in manifest '$file'"
+    echo "- Resolved version to: $version"
 
-  yq e --inplace ".version = \"$version\"" "$file"
+    yq e --inplace ".version = \"$version\"" "$file"
+  else
+    echo "Skipping version update for manifest '$file' due to unresolved service name." >&2
+  fi
 }
