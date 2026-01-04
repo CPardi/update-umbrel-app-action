@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 setup() {
-  echo "::group::Begin setup"
+  echo "::group::Setup"
   . update-version-functions.sh
   echo "::endgroup::"
 }

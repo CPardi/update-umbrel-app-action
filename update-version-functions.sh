@@ -5,7 +5,7 @@ command() {
   local command="$2"
 
   local file="${BASH_SOURCE[1]}"
-  local line="${BASH_LINENO[0]}"
+  local line="${BASH_LINENO[1]}"
   local col=1  # Bash does not provide column info, so default to 1
 
   echo "::$2 file=${file},line=${line},col=${col}::${message}"
