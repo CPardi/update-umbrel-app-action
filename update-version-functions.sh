@@ -9,16 +9,6 @@ warn() {
   echo "::warning file=${file},line=${line},col=${col}::${message}"
 }
 
-check_not_empty() {
-  local value="$1"
-  local error_message="$2"
-
-  if [[ -z "$value" ]]; then
-    echo "Error: $error_message" >&2
-    exit 1
-  fi
-}
-
 warn_if_empty() {
   local value="$1"
   local warning_message="$2"

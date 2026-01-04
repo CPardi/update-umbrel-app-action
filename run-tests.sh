@@ -28,10 +28,10 @@ run_test() {
   local source_service_name=$3
   local fallback_service_name=$4
 
-  echo "---- Begin $test_name ----"
+  echo "::group::{$test_name}"
   process_manifest "$test_name/umbrel-app.yml" "$source_service_name" "$fallback_service_name"
   assert_version "$test_name" "$expected_version"
-  echo "---- End $test_name ----"
+  echo "::endgroup::"
 }
 
 setup
