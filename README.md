@@ -13,9 +13,14 @@ The action performs the following steps:
 1. Searches for all `umbrel-app.yml` files.
 2. For each file, reads the `docker-compose.yml` file in the same directory.
 3. Extracts the version from the image string of the resolved service.
-   1. As compose files can contain multiple services, the service image from which to get the version is chosen using the name in the APP_HOST, see the Inputs section to customise this resolution.
+   1. As compose files can contain multiple services, the service image from which to get the version is chosen using 
+      the name in the APP_HOST, see the Inputs section to customise this resolution.
 4. Updates the `version` field in the `umbrel-app.yml` file.
 5. Finally, commits the changes back to the current branch.
+
+> [!WARNING]
+> If the action cannot resolve the service name, Docker image, or version during execution, it will not fail the 
+> workflow. Instead, it will emit a warning message and continue processing other manifests.
 
 ## Prerequisites
 
