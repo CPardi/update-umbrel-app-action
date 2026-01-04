@@ -7,11 +7,11 @@ setup() {
 }
 
 assert_version() {
-  directory=$1
-  expected_version=$2
+  local directory=$1
+  local expected_version=$2
 
-
-  version=$(yq ".version" "test-default-convention/umbrel-app.yml")
+  local version
+  version=$(yq ".version" "$directory/umbrel-app.yml")
   if [[ "$version" != "$expected_version" ]]; then
     echo "FAILED: expected version '$expected_version' but got '$version'" >&2
     return 1
@@ -20,28 +20,23 @@ assert_version() {
   echo "PASSED"
 }
 
-test_default_convention() {
-  echo "---- Begin test-default-convention ----"
-  process_manifest "test-default-convention/umbrel-app.yml"
-  assert_version "test-default-convention" "v0.9.0"
-  echo "---- End test-default-convention ----"
-}
+run_test() {
+  local expected_version=$1
+  local test_name=$2
+  local source_service_name=$3
+  local fallback_service_name=$4
 
-test_source_service_name() {
-  echo "---- Begin test-source-service-name ----"
-  process_manifest "test-source-service-name/umbrel-app.yml" "source"
-  assert_version "test-source-service-name" "v0.9.0"
-  echo "---- End test-source-service-name ----"
-}
-
-test_fallback_service_name() {
-  echo "---- Begin test-fallback-service-name ----"
-  process_manifest "test-fallback-service-name/umbrel-app.yml" "" "fallback"
-  assert_version "test-fallback-service-name" "v0.9.0"
-  echo "---- End test-fallback-service-name ----"
+  echo "---- Begin $test_name ----"
+  process_manifest "$test_name/umbrel-app.yml" "$source_service_name" "$fallback_service_name"
+  assert_version "$test_name" "$expected_version"
+  echo "---- End $test_name ----"
 }
 
 setup
-test_default_convention
-test_source_service_name
-test_fallback_service_name
+
+run_test "v0.9.0" "test-default-convention" "" ""
+run_test "v0.9.0" "test-source-service-name" "source" ""
+run_test "v0.9.0" "test-fallback-service-name" "" "fallback"
+run_test "v1.8.2" "test-no-app-proxy" "" "web"
+run_test "v1.8.2" "test-ip-app-host" "" "web"
+run_test "v1.8.2" "test-missing-fallback" "" "web"
