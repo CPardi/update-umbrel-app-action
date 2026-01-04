@@ -19,9 +19,7 @@ jobs:
           cmd: yq --version
 
       - name: Run update-version tests
-        working-directory: tests-update-version
-        run: |
-          ./run-tests.sh
+        run: ./run-tests.sh
 
   create-test-pr:
     if: github.actor == 'dependabot[bot]'
@@ -33,6 +31,5 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-
           ref: ${{ github.head_ref }}
       - uses: CPardi/update-umbrel-app-action@master
