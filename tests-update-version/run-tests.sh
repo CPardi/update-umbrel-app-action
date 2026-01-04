@@ -2,7 +2,7 @@
 
 setup() {
   echo "::group::Setup"
-  . update-version-functions.sh
+  . ../update-version-functions.sh
   echo "::endgroup::"
 }
 
