@@ -6,6 +6,7 @@ setup() {
     echo "----  End setup  ----"
 }
 
+fail=0
 assert_version() {
   local directory=$1
   local expected_version=$2
@@ -14,6 +15,7 @@ assert_version() {
   version=$(yq ".version" "$directory/umbrel-app.yml")
   if [[ "$version" != "$expected_version" ]]; then
     echo "FAILED: expected version '$expected_version' but got '$version'" >&2
+    fail=1
     return 1
   fi
 
@@ -40,3 +42,7 @@ run_test "v0.9.0" "test-fallback-service-name" "" "fallback"
 run_test "v1.8.2" "test-no-app-proxy" "" "web"
 run_test "v1.8.2" "test-ip-app-host" "" "web"
 run_test "v1.8.2" "test-missing-fallback" "" "web"
+
+if [ "$fail" -eq 1 ]; then
+  exit 1
+fi
