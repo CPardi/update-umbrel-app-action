@@ -1,0 +1,3 @@
+manifestVersion: 1.1
+id: metrics-docker-exporter
+version: "v1.8.0"

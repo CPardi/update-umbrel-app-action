@@ -32,7 +32,7 @@ resolve_service() {
       sed -E 's/^[^_]+_([^_]+)_[^_]+$/\1/') # Extract <service-name> from the convention <project-name>_<service-name>_<replica-number>
   fi
 
-  if [ "$(yq e ".services.$service_name.image" "$directory/docker-compose.yml")" = "null" ]; then
+  if [ "$(yq e ".services.\"$service_name\".image" "$directory/docker-compose.yml")" = "null" ]; then
     if [ -n "$fallback_service_name" ]; then
       service_name="$fallback_service_name"
     else
@@ -63,28 +63,22 @@ process_manifest() {
   local source_service_name="$2"
   local fallback_service_name="$3"
 
-  echo "- Found umbrel manifest: $file"
   local directory
   directory=$(dirname "$file")
 
-  local service_name
-  service_name=$(resolve_service "$source_service_name" "$directory" "$fallback_service_name")
+  local service_name=$(resolve_service "$source_service_name" "$directory" "$fallback_service_name")
   warn_if_empty "$service_name" "Could not resolve service name in manifest '$file'"
   echo "- Resolved service name to: $service_name"
 
-  if [[ -n "$service_name" ]]; then
-    local image
-    image=$(resolve_image "$service_name" "$directory")
-    check_not_empty "$image" "Could not resolve image of '$service_name' in manifest '$file'"
-    echo "- Resolved image to: $image"
+  local image=$(resolve_image "$service_name" "$directory")
+  warn_if_empty "$image" "Could not resolve image of '$service_name' in manifest '$file'"
+  echo "- Resolved image to: $image"
 
-    local version
-    version=$(resolve_version "$image" "$directory")
-    check_not_empty "$version" "Could not resolve version of '$service_name' in manifest '$file'"
-    echo "- Resolved version to: $version"
+  local version=$(resolve_version "$image" "$directory")
+  warn_if_empty "$version" "Could not resolve version of '$service_name' in manifest '$file'"
+  echo "- Resolved version to: $version"
 
+  if [[ -n "$version" ]]; then
     yq e --inplace ".version = \"$version\"" "$file"
-  else
-    echo "Skipping version update for manifest '$file' due to unresolved service name." >&2
   fi
 }
