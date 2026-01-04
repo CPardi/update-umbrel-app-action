@@ -2,7 +2,7 @@
 
 setup() {
     echo "---- Begin setup ----"
-  . ../update-version-functions.sh
+  . update-version-functions.sh
     echo "----  End setup  ----"
 }
 
