@@ -1,12 +1,24 @@
 #!/usr/bin/env bash
 
-warn() {
+command() {
   local message="$1"
+  local command="$2"
+
   local file="${BASH_SOURCE[1]}"
   local line="${BASH_LINENO[0]}"
   local col=1  # Bash does not provide column info, so default to 1
 
-  echo "::warning file=${file},line=${line},col=${col}::${message}"
+  echo "::$2 file=${file},line=${line},col=${col}::${message}"
+}
+
+warn() {
+  local message="$1"
+  command "$message" "warning"
+}
+
+error() {
+  local message="$1"
+  command "$message" "error"
 }
 
 warn_if_empty() {
