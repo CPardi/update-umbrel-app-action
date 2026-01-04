@@ -1,13 +1,24 @@
 #!/usr/bin/env bash
 
-check_not_empty() {
-  local value="$1"
-  local error_message="$2"
+command() {
+  local message="$1"
+  local command="$2"
 
-  if [[ -z "$value" ]]; then
-    echo "Error: $error_message" >&2
-    exit 1
-  fi
+  local file="${BASH_SOURCE[2]}"
+  local line="${BASH_LINENO[2]}"
+  local col=1  # Bash does not provide column info, so default to 1
+
+  echo "::$2 file=${file},line=${line},col=${col}::${message}"
+}
+
+warn() {
+  local message="$1"
+  command "$message" "warning"
+}
+
+error() {
+  local message="$1"
+  command "$message" "error"
 }
 
 warn_if_empty() {
@@ -15,7 +26,7 @@ warn_if_empty() {
   local warning_message="$2"
 
   if [[ -z "$value" ]]; then
-    echo "Warning: $warning_message" >&2
+    warn "$warning_message"
   fi
 }
 
