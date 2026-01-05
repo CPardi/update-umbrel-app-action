@@ -111,9 +111,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    # Required to allow the action to commit changes to the branch.
     permissions:
-      contents: write
+      contents: write # Required to allow the action to commit changes to the branch. 
+      pull-requests: write # Required to make comments on the pull request.
 
     steps:
       # 1. Check out the pull request branch
@@ -123,7 +123,9 @@ jobs:
 
       # 2. Run the update action
       - uses: CPardi/update-umbrel-app-action@v0
-        # Add a `with` section to customise which service to get the version from
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # Optional inputs are available to customise which service to get the version from
 ```
 
 ## Action Inputs
@@ -132,7 +134,8 @@ When no inputs are specified, an attempt is made to infer the service name from 
 Docker Compose convention `<project-name>_<service-name>_<replica-number>`. If all your apps follow this convention, no
 inputs are required. If your service name cannot be inferred using this method, you can use the following optional inputs:
 
-| Name                    | Required | Description                                                            |
-|-------------------------|----------|------------------------------------------------------------------------|
-| `fallback_service_name` | No       | Service name to use if automatic inference from `APP_HOST` fails.      |
-| `source_service_name`   | No       | Static service name to always use when searching `docker-compose.yml`. |
+| Name                    | Required | Description                                                                           |
+|-------------------------|----------|---------------------------------------------------------------------------------------|
+| `github_token`          | Yes      | GitHub token for authentication, requires `contents` and `pull-requests` permissions. |
+| `fallback_service_name` | No       | Service name to use if automatic inference from `APP_HOST` fails.                     |
+| `source_service_name`   | No       | Static service name to always use when searching `docker-compose.yml`.                |
