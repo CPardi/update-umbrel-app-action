@@ -15,15 +15,13 @@ jobs:
       pull-requests: write
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
       - name: Add comment to PR
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-            gh pr comment --body "Hi from GitHub CLI"
-
-      - name: Checkout repository
-        uses: actions/checkout@v5
-
+          gh pr comment --body "Hi from GitHub CLI"
       - uses: mikefarah/yq@v4
         with:
           cmd: yq --version
