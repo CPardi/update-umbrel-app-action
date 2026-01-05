@@ -4,13 +4,13 @@ description: |
   and commits the result to the current branch.
 inputs:
   github_token:
-    description: 'GitHub token for authentication'
+    description: 'GitHub token for authentication, requires `contents` and `pull-requests` permissions.'
     required: true
   source_service_name:
-    description: 'Static service name to read the updated version from.'
+    description: 'Service name to use if automatic inference from `APP_HOST` fails.'
     required: false
   fallback_service_name:
-    description: 'Static service name to read the updated version from when cannot infer service from APP_HOST.'
+    description: 'Static service name to always use when searching `docker-compose.yml`.'
     required: false
 runs:
   using: 'composite'
