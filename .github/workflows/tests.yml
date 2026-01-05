@@ -21,6 +21,8 @@ jobs:
           gh api repos/${{ github.repository }}/check-runs -X POST -F name="My Check" -F head_sha=${{ github.sha }} \
             -F status="completed" -F conclusion="failure" \
             -F actions[][label]="Ignore"
+            -F actions[][description]="Ignore the warnings"
+            -F actions[][identifier]="ignore"
 
       - name: Checkout repository
         uses: actions/checkout@v5
