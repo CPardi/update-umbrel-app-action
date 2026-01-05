@@ -3,6 +3,9 @@ description: |
   Updates umbrel-app.yml files in Umbrel App Stores to mirror updates to associated docker compose files 
   and commits the result to the current branch.
 inputs:
+  github_token:
+    description: 'GitHub token for authentication'
+    required: true
   source_service_name:
     description: 'Static service name to read the updated version from.'
     required: false
@@ -33,7 +36,7 @@ runs:
       if: env.WARNINGS_EMITTED == 'true'
       uses: actions/github-script@v6
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ inputs.GITHUB_TOKEN }}
         script: |
           github.rest.issues.createComment({
             issue_number: context.issue.number,
