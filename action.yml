@@ -42,5 +42,5 @@ runs:
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: "Please review the [warnings](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}) generated during processing."
+            body: `⚠️ Please review the [warnings](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}) generated during processing.`
           })
