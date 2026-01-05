@@ -1,4 +1,4 @@
-name: Tests
+name: Test
 
 on:
   push:
@@ -8,21 +8,19 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  test:
+  tests:
     runs-on: ubuntu-latest
+
     permissions:
-      contents: write
-      checks: write
+      pull-requests: write
+
     steps:
-      - name: Create check
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh api repos/${{ github.repository }}/check-runs -X POST -F name="My Check" -F head_sha=${{ github.sha }} \
-            -F status="completed" -F conclusion="failure" \
-            -F actions[][label]="Ignore" \
-            -F actions[][description]="Ignore the warnings" \
-            -F actions[][identifier]="ignore"
+      - name: Add comment to PR
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            gh pr comment --body "Hi from GitHub CLI"
 
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -41,7 +39,6 @@ jobs:
 
     permissions:
       contents: write
-      pull-requests: write
 
     steps:
       - uses: actions/checkout@v6
