@@ -13,6 +13,7 @@ jobs:
 
     permissions:
       contents: write
+      issues: write
 
     steps:
       - name: Add comment to PR
