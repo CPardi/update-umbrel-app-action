@@ -29,3 +29,14 @@ runs:
     - uses: stefanzweifel/git-auto-commit-action@v7
       with:
         commit_message: Update versions in umbrel-app.yml
+    - name: Inform user of warnings
+      if: env.WARNINGS_EMITTED == 'true'
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: "Please review the [warnings](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}) generated during processing."

@@ -14,6 +14,7 @@ command() {
 warn() {
   local message="$1"
   command "$message" "warning"
+  echo "WARNINGS_EMITTED=true" >> "$GITHUB_ENV"
 }
 
 error() {
