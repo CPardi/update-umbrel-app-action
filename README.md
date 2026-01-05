@@ -3,7 +3,8 @@
 This GitHub Action automatically synchronises the `version` field in your `umbrel-app.yml` file with the Docker image
 version specified in the corresponding `docker-compose.yml` file.
 
-It's designed to work seamlessly with Dependabot, which automatically creates pull requests to update Docker image versions. When Dependabot opens a PR, this action updates the app manifest to match, keeping everything in sync.
+It's designed to work seamlessly with Dependabot, which automatically creates pull requests to update Docker image 
+versions. When Dependabot opens a PR, this action updates the app manifest to match, keeping everything in sync.
 
 ## How It Works
 
@@ -91,8 +92,9 @@ updates:
 
 ### GitHub Workflow
 
-To automate the process of keeping the version field in sync with the Docker Compose file, add the YAML content below to a new
-file at `.github/workflows/update-umbrel-metadata.yml`. This will configure a workflow that runs whenever a pull request is opened or updated by Dependabot.
+To automate the process of keeping the version field in sync with the Docker Compose file, add the YAML content below to 
+a new file at `.github/workflows/update-umbrel-metadata.yml`. This will configure a workflow that runs whenever a pull 
+request is opened or updated by Dependabot.
 
 ```yaml
 name: Sync umbrel-app.yml Version
