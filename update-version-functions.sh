@@ -13,7 +13,9 @@ command() {
 
 warn() {
   local message="$1"
+  echo -en "\033[33m"
   command "$message" "warning"
+  echo -en "\033[0m"
   echo "WARNINGS_EMITTED=true" >> "$GITHUB_ENV"
 }
 
@@ -91,6 +93,6 @@ process_manifest() {
   echo "- Resolved version to: $version"
 
   if [[ -n "$version" ]]; then
-    yq e --inplace ".version = \"$version\"" "$file"
+    sed -i -E "s/^\s*version:.*$/version: \"$version\"/" "$file"
   fi
 }
