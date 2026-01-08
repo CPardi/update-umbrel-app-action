@@ -8,14 +8,12 @@ command() {
   local line="${BASH_LINENO[2]}"
   local col=1  # Bash does not provide column info, so default to 1
 
-  echo "::$2 file=${file},line=${line},col=${col}::${message}"
+  echo -e "::$2 file=${file},line=${line},col=${col}::${message}"
 }
 
 warn() {
   local message="$1"
-  echo -en "\033[33m"
-  command "$message" "warning"
-  echo -en "\033[0m"
+  command "\033[33m$message\033[0m" "warning"
   echo "WARNINGS_EMITTED=true" >> "$GITHUB_ENV"
 }
 
@@ -93,6 +91,6 @@ process_manifest() {
   echo "- Resolved version to: $version"
 
   if [[ -n "$version" ]]; then
-    sed -i -E "s/^\s*version:.*$/version: \"$version\"/" "$file"
+    sed -i -E "s/^\s*version\s*:\s*.*$/version: \"$version\"/" "$file"
   fi
 }
