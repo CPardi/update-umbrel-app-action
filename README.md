@@ -38,6 +38,9 @@ my-umbrel-app-store/
 │   └── umbrel-app.yml
 ```
 
+The Docker image references inside your Compose files should specify a fixed version tag. Avoid using `latest` or 
+omitting the tag, as the action relies on the version tag to update the `umbrel-app.yml` file correctly.
+
 ## Starter Configuration
 
 Starting from a repository that does not currently use Dependabot, the following configuration can be used as a working 

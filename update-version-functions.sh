@@ -91,6 +91,6 @@ process_manifest() {
   echo "- Resolved version to: $version"
 
   if [[ -n "$version" ]]; then
-    yq e --inplace ".version = \"$version\"" "$file"
+    sed -i -E "s/^\s*version\s*:\s*.*$/version: \"$version\"/" "$file"
   fi
 }
