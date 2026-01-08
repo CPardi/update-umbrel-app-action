@@ -8,12 +8,12 @@ command() {
   local line="${BASH_LINENO[2]}"
   local col=1  # Bash does not provide column info, so default to 1
 
-  echo -e "::$2 file=${file},line=${line},col=${col}::${message}"
+  echo "::$2 file=${file},line=${line},col=${col}::${message}"
 }
 
 warn() {
   local message="$1"
-  command "\033[33m$message\033[0m" "warning"
+  command "$message" "warning"
   echo "WARNINGS_EMITTED=true" >> "$GITHUB_ENV"
 }
 
