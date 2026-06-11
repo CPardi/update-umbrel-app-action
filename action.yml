@@ -15,7 +15,7 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         ref: ${{ github.head_ref }}
     - uses: mikefarah/yq@v4
@@ -29,7 +29,7 @@ runs:
         commit_message: Update versions in umbrel-app.yml
     - name: Inform user of warnings
       if: env.WARNINGS_EMITTED == 'true'
-      uses: actions/github-script@v6
+      uses: actions/github-script@v9
       with:
         github-token: ${{ inputs.github_token }}
         script: |
