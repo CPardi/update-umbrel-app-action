@@ -108,9 +108,9 @@ on:
 
 jobs:
   update-umbrel-app:
-    # Only run for pull requests created by Dependabot.
+    # Only run for successful pull requests created by Dependabot.
     # Remove this line to run the action on all pull requests.
-    if: github.actor == 'dependabot[bot]'
+    if: success() && (github.event.pull_request.user.login == 'dependabot[bot]')
 
     runs-on: ubuntu-latest
 
